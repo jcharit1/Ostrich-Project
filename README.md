@@ -1,27 +1,5 @@
 # Ostrich Project
 
-## Authors
-Nachum Sicherman<br/>
-Carson Family Professor of Business<br/>
-Graduate School of Business<br/> 
-Columbia University<br/>
-New York, NY 10027<br/>
-ns38@columbia.edu<br/>
-
-John Donaldson<br/>
-Mario J. Gabelli Professor of Finance<br/>
-Graduate School of Business<br/> 
-Columbia University<br/>
-New York, NY 10027<br/>
-jd34@gsb.columbia.edu<br/>
-
-Jimmy Charite<br/>
-Research Consultant<br/>
-Graduate School of Business<br/> 
-Columbia University<br/>
-New York, NY 10027<br/>
-jc4144@columbia.edu<br/> 
-
 ## Description
 
 The objective of the program is to ascertain how well the pattern of information acquisition by a specific investor concerning the valuation of his portfolio (decisions to "look" or "not look") can be replicated by the actions of a hypothetical rational investor with loss averse preferences and rational expectations in the context of a simple dynamic economic model. The notion of rational expectations is the (very strong) assumption that the model agent knows the precise probability distributions governing all economic quantities of interest to him.
