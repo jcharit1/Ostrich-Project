@@ -1,7 +1,5 @@
 # Ostrich Project
 
-Code for investigating the Ostrich Effect. 
-
 ## Authors
 Nachum Sicherman<br/>
 Carson Family Professor of Business<br/>
@@ -10,19 +8,19 @@ Columbia University<br/>
 New York, NY 10027<br/>
 ns38@columbia.edu<br/>
 
-John Donaldson
-Mario J. Gabelli Professor of Finance
-Graduate School of Business 
-Columbia University
-New York, NY 10027
-jd34@gsb.columbia.edu
+John Donaldson<br/>
+Mario J. Gabelli Professor of Finance<br/>
+Graduate School of Business<br/> 
+Columbia University<br/>
+New York, NY 10027<br/>
+jd34@gsb.columbia.edu<br/>
 
-Jimmy Charite
-Research Consultant
-Graduate School of Business 
-Columbia University
-New York, NY 10027
-jc4144@columbia.edu 
+Jimmy Charite<br/>
+Research Consultant<br/>
+Graduate School of Business<br/> 
+Columbia University<br/>
+New York, NY 10027<br/>
+jc4144@columbia.edu<br/> 
 
 ## Description
 
