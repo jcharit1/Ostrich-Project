@@ -3,13 +3,12 @@
 Code for investigating the Ostrich Effect. 
 
 ## Authors
-Nachum Sicherman
-
-Carson Family Professor of Business
-Graduate School of Business 
-Columbia University
-New York, NY 10027
-ns38@columbia.edu
+Nachum Sicherman<br/>
+Carson Family Professor of Business<br/>
+Graduate School of Business<br/> 
+Columbia University<br/>
+New York, NY 10027<br/>
+ns38@columbia.edu<br/>
 
 John Donaldson
 Mario J. Gabelli Professor of Finance
