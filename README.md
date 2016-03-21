@@ -32,8 +32,6 @@ Underlying our numerical strategy is the perspective that the individual investo
 
 The structure of the numerical algorithm is the first to use straightforward dynamic programming to compute the option decision rule for the hypothetical investor. When the hypothetical investor is confronted with the same rate of return phenomenon as his actual counterpart, and applies his derived optimal decision rule, he generates a series of hypothetical “look” and “not look” actions which can be  compared to the actual observed decisions of the investor under study. A simple goodness of fit measure is proposed. Some basic knowledge of dynamic programming is assumed.
 
-See 'doc/Description of Program One' for a full description of the model.
-
 ## Installation
 
 TODO: Describe the installation process
