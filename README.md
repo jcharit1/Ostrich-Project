@@ -4,6 +4,7 @@ Code for investigating the Ostrich Effect.
 
 ## Authors
 Nachum Sicherman
+
 Carson Family Professor of Business
 Graduate School of Business 
 Columbia University
