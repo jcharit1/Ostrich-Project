@@ -22,7 +22,7 @@ int main(int argc, char *argv[]){
   */
   
   //Dataset inputs
-  std::string programOneVersion = argv[1];
+  std::string programOneVersion = argv[1]; //Simple or Detailed
   std::string parameter_file_path = argv[2];
   std::string input_file_name = argv[3]; //name of the parameter for the output
   std::string sample = argv[4]; //for the investor data file
@@ -67,38 +67,43 @@ int main(int argc, char *argv[]){
   std::vector< std::vector<std::string>*> inputVec = {&alpha, &beta, &gamma, &delta, &theta, &t_max, &npart};
   importPara(parameter_file_path ,&inputVec);
   
-  //get the memory request for the SGE commands
-  std::string memRequest = getMemRequest(programOneVersion, &npart, MCNum_str, sys);
-  
-  //get the SGE commands
+  //memory request for the SGE commands
+  std::string memRequest, sgeLeadingCom, sgeEndingCom;
   std::vector<std::string> comVec = {".", "."};
-  getSGECom(sys, &comVec, memRequest);
-  std::string sgeLeadingCom = comVec[0];
-  std::string sgeEndingCom = comVec[1];
-  
+
   //the investor data file to check if it has already completed
   std::string investorResultsFile;
+  
   //hold the sys commands
   std::string command_str;
   
   //Full file path of the Program
-  std::string programPath = programLocation(programOneVersion, sys);
-  
+  std::string programName, programPath;
+
   //looping over investors
   for(int i = 0; i < (signed int) investorList.size(); i++){
     std::string investor = investorList.at(i);
     std::string investorDataFile = investorDataFileName(sys, sample, investor)+".txt";
     int z = 1;
     //loopingover parameters
-    for(int a = 0; a< (signed int) alpha.size(); a++){
-      for(int b = 0; b< (signed int) beta.size(); b++){
+    for(int b = 0; b< (signed int) beta.size(); b++){
+     
+      //Program name & launch details
+      programName= getProgramName(programOneVersion ,beta[b]);
+      programPath = programLocation(programName, sys);
+      memRequest = getMemRequest(programName, &npart, MCNum_str, sys); //mem request
+      getSGECom(sys, &comVec, memRequest);
+      sgeLeadingCom = comVec[0];
+      sgeEndingCom = comVec[1];
+      
+      for(int a = 0; a< (signed int) alpha.size(); a++){
         for(int g = 0; g< (signed int) gamma.size(); g++){
           for(int d = 0; d< (signed int) delta.size(); d++){
             for(int t = 0; t< (signed int) theta.size(); t++){
               for(int tm = 0; tm< (signed int) t_max.size(); tm++){
                 for(int np = 0; np< (signed int) npart.size(); np++){
-                  std::string A = alpha[a];
                   std::string B = beta[b];
+                  std::string A = alpha[a];
                   std::string G = gamma[g];
                   std::string D = delta[d];
                   std::string T = theta[t];

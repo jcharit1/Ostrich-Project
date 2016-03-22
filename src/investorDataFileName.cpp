@@ -27,6 +27,11 @@ std::string investorDataFileName(std::string sys, std::string sample, std::strin
     //on the Columbia B-school servers
     baseDir = "/user/user1/jc4144/Nachum/Ostrich/cluster/cluster"+cl;
   }
+  if (sys == "Personal"){
+    //on Personal
+    baseDir = "/media/windows7/Users/Charite/Dropbox/Nachum/OstrichCPP/AWSCode/Ostrich/investorData/cluster/cluster"+cl;
+  }
+  
   
   fullFileName = baseDir+"/"+fileName;
   

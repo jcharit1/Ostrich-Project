@@ -23,6 +23,10 @@ std::string investorListFileName(std::string sys, std::string listTag) {
     //on the Columbia B-school servers
     baseDir = "/user/user1/jc4144/Nachum/Ostrich";
   }
+  if (sys == "Personal"){
+    //Personal
+    baseDir = "/media/windows7/Users/Charite/Dropbox/Nachum/OstrichCPP/AWSCode/Ostrich/investorLists";
+  }
   
   fullFileName = baseDir+"/"+fileName;
   

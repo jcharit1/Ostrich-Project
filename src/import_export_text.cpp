@@ -38,3 +38,22 @@ void textExport(int max_row, std::string file_path, std::vector<long double>* da
   }
   outFile.close();
 }
+
+void textMatrixExport(int max_row, std::string file_path, std::vector<std::vector<long double>* >* data){
+  //Opening the file
+  std::ofstream outFile;
+  outFile.open(file_path.c_str());
+  
+  //Looping through the data, converting it to strings and writing onto the datafile
+  std::string line_input;
+  std::string D = ", ";
+  for(int i = 0; i<max_row; i++){
+    line_input = std::to_string((data->at(0))->at(i));
+    for(int j = 1; j < (signed int) data->size(); j++){
+      line_input = line_input+D+std::to_string((data->at(j))->at(i));
+    }
+    line_input = line_input+"\n";
+    outFile << line_input;
+  }
+  outFile.close();
+}
