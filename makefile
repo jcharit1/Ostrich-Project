@@ -24,7 +24,7 @@ EXE_RS_D=ProgramOneFinalRS_Detailed
 #Beta=0 closed form version
 FILES_B0=J_B0.cpp investorThread.cpp 
 SOURCES_B0=$(FILES_B0:%.cpp=$(SRCDIR)/%.cpp)
-EXE_BO=ProgramOneFinalRSB0
+EXE_B0=ProgramOneFinalRSB0
 
 #Beta=0 closed form version, Detailed Output
 FILES_B0_D=J_B0.cpp investorThreadDetailed.cpp import_export_text.cpp
