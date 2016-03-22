@@ -5,6 +5,7 @@
 #include "part_functions.h"
 #include "distribution.h"
 #include "restore_point.h"
+#include "utility.h"
 #include <algorithm>
 #include <time.h>
 #include <iostream>
@@ -42,7 +43,7 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
   //Variables shared by the Monte Carlo simulations and Riemann Sum approximations
   ///////////////////////////////////////////////////////////////////////////////
   long double part_width = (part->at(1)) - (part->at(0));
-  long double B_reset, term_A, term_B; //utility from looking (term_A) and utility from not looking (term_B)
+  long double u_dont_look_reset, u_look, u_dont_look; //utility from looking (u_look) and utility from not looking (u_dont_look)
   long double conditional_prob, total_prob;
   long double J_0, Jvec_L, Jvec_DL; //utility value variables
   int numDraws; //number of draws
@@ -59,12 +60,7 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
       //looping over the benchmark
       for(int b = 1; b <=part_size; b++){
         //Calculating the utility associate with each state space in the final period (note time ==0 is the final period, hence J_0)
-        if(approx_w->at(w-1) >= bench->at(b-1)){
-          J_0 = (1.0+A)*(approx_w->at(w-1) - bench->at(b-1));
-        }
-        else{
-          J_0 = G*(1.0+A)*(approx_w->at(w-1) - bench->at(b-1));
-        }
+        J_0 = utility_look(approx_w->at(w-1), bench->at(b-1), A, G);
         //looping over time since last looked, important for the look/don't look decision, but we are at the last period so it doesn't matter
         for(int t = 1; t <=(t_max_size); t++){
           //looping over wealth since last looked, important for the look/don't look decision, but we are at the last period so it doesn't matter
@@ -73,7 +69,7 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
               (new_LDL->at(0)).at(x-1) = 1.0;
               (new_LDL->at(1)).at(x-1) = J_0;
             }
-            else{ //Note: If less than the benchmark, times GAMMA
+            else{ 
               (new_LDL->at(0)).at(x-1) = 0.0;
               (new_LDL->at(1)).at(x-1) = J_0;
             }
@@ -89,13 +85,7 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
       //looping over benchmarks
       for(int b = 1; b <= part_size; b++){
         //Calculating utility from not looking
-        if(approx_w->at(w-1) >= bench->at(b-1)){
-          B_reset = approx_w->at(w-1) - bench->at(b-1);
-        }
-        else{
-          //% If less than the benchmark, times GAMMA
-          B_reset = G*(approx_w->at(w-1) - bench->at(b-1));
-        }
+        u_dont_look_reset = utility_dont_look(approx_w->at(w-1), bench->at(b-1), G);
         
         //looping over time since last looked
         for(int t = 1; t <=(t_max_size); t++) {
@@ -115,20 +105,20 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
             EW = exp(m +(v/2));
             PEW = EW*0.5*(1.0+erf((m+v-log(bench->at(b-1)))/(s*sqrt(2))));
             Fb = logNormCDF(bench->at(b-1),m,v);
-            term_A = (1+A)*(G*EW + (1-G)*(PEW + (bench->at(b-1))*Fb) - bench->at(b-1));
-            term_B = B_reset; //reset term_B, term_B is the utility from not looking
+            u_look = (1+A)*(G*EW + (1-G)*(PEW + (bench->at(b-1))*Fb) - bench->at(b-1));
+            u_dont_look = u_dont_look_reset; //reset u_dont_look, u_dont_look is the utility from not looking
             
             //determine whether term A or B is greater and add appropriate new row to w_b_Tt_WTt_action_utility
             //I don't know why the last two columns are necessary
-            if(term_A >= term_B) {
+            if(u_look >= u_dont_look) {
               //Utility(look) >= Utility(don't look)
               (new_LDL->at(0)).at(x-1) = 1.0;
-              (new_LDL->at(1)).at(x-1) = term_A;
+              (new_LDL->at(1)).at(x-1) = u_look;
             }
             else{
               //Utility(look) < Utility(don't look)
               (new_LDL->at(0)).at(x-1) = 0.0;
-              (new_LDL->at(1)).at(x-1) = term_B;
+              (new_LDL->at(1)).at(x-1) = u_dont_look;
             }
             x = x + 1; //move to the next element of the state space and determine the look decision and associated utility consequence
           }

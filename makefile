@@ -5,11 +5,11 @@ INC= -I include
 SRCDIR= src
 
 #Shared sources
-FILES= Ostrich.cpp investorThread.cpp combinatorial.cpp distribution.cpp file_functions.cpp investor_data.cpp investorResultsFileName.cpp makeActWealthPart.cpp makeComparable.cpp mix.cpp NDiscrete.cpp part_functions.cpp restore_point.cpp splitLinetoVec.cpp  vec_functions.cpp vec_stat.cpp
+FILES= Ostrich.cpp investorThread.cpp combinatorial.cpp distribution.cpp file_functions.cpp investor_data.cpp investorResultsFileName.cpp makeActWealthPart.cpp makeComparable.cpp mix.cpp NDiscrete.cpp part_functions.cpp restore_point.cpp splitLinetoVec.cpp  vec_functions.cpp vec_stat.cpp utility.cpp
 SOURCES = $(FILES:%.cpp=$(SRCDIR)/%.cpp)
 
 #Riemann Sum version
-FILES_RS=J_RS.cpp utility.cpp 
+FILES_RS=J_RS.cpp 
 SOURCES_RS=$(FILES_RS:%.cpp=$(SRCDIR)/%.cpp)
 EXE_RS=ProgramOneFinalRS
 

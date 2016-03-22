@@ -1,6 +1,6 @@
 //in J_RS.cpp
 
-#include "J.h"
+#include "J.h" 
 #include "part_functions.h"
 #include "distribution.h"
 #include "restore_point.h"
@@ -43,8 +43,8 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
   //Variables shared by the Monte Carlo simulations and Riemann Sum approximations
   ///////////////////////////////////////////////////////////////////////////////
   long double part_width = (part->at(1)) - (part->at(0));
-  long double B_reset, term_A, term_B; //utility from looking (term_A) and utility from not looking (term_B)
-  long double act_w_x, act_w_x_1; //actual wealth
+  long double u_dont_look_reset, u_look, u_dont_look; //utility from looking (u_look) and utility from not looking (u_dont_look)
+  long double act_w_x, act_w_x_1, act_w_x_avg; //actual wealth
   long double approx_w_minus_one_L, approx_w_minus_one_DL, bench_minus_one_L, bench_minus_one_DL, t_minus_one_L, t_minus_one_DL, approx_wT_minus_one_L, approx_wT_minus_one_DL; //future period state space variables (note last period is time ==0)
   long double conditional_prob, total_prob;
   int w_L, w_DL, b_L, b_DL, t_L, t_DL, wT_L, wT_DL, index_L, index_DL; //index variables
@@ -67,12 +67,7 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
       //looping over the benchmark
       for(int b = 1; b <=part_size; b++){
         //Calculating the utility associate with each state space in the final period (note time ==0 is the final period, hence J_0)
-        if(approx_w->at(w-1) >= bench->at(b-1)){
-          J_0 = (1.0+A)*(approx_w->at(w-1) - bench->at(b-1));
-        }
-        else{
-          J_0 = G*(1.0+A)*(approx_w->at(w-1) - bench->at(b-1));
-        }
+        J_0 = utility_look(approx_w->at(w-1), bench->at(b-1), A, G);
         //looping over time since last looked, important for the look/don't look decision, but we are at the last period so it doesn't matter
         for(int t = 1; t <=(t_max_size); t++){
           //looping over wealth since last looked, important for the look/don't look decision, but we are at the last period so it doesn't matter
@@ -81,7 +76,7 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
               (new_LDL->at(0)).at(x-1) = 1.0;
               (new_LDL->at(1)).at(x-1) = J_0;
             }
-            else{ //Note: If less than the benchmark, times GAMMA
+            else{ 
               (new_LDL->at(0)).at(x-1) = 0.0;
               (new_LDL->at(1)).at(x-1) = J_0;
             }
@@ -97,16 +92,10 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
       //looping over benchmarks
       for(int b = 1; b <= part_size; b++){
         //Calculating utility from not looking
-        if(approx_w->at(w-1) >= bench->at(b-1)){
-          B_reset = approx_w->at(w-1) - bench->at(b-1);
-        }
-        else{
-          //% If less than the benchmark, times GAMMA
-          B_reset = G*(approx_w->at(w-1) - bench->at(b-1));
-        }
-        
+        u_dont_look_reset = utility_dont_look(approx_w->at(w-1), bench->at(b-1), G);
+
         //Calculating the future period benchmark if the investor doesn't look
-        bench_minus_one_DL = T*(approx_w->at(w-1)) + (1.0-T)*(bench->at(b-1));
+        bench_minus_one_DL = update_benchmark(approx_w->at(w-1), bench->at(b-1), T);
         //Determining the partition index of the nearest benchmark value to bench_minus_one_DL
         b_DL = round((bench_minus_one_DL-part0)/part_width)+1.0;
         b_DL = std::min(std::max(b_DL,1), part_size);
@@ -125,7 +114,7 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
           for(int wT = 1; wT <= part_size; wT++){
             
             // Determining the wealth since last looked for future period, if didn't look
-            approx_wT_minus_one_DL = W_Tt->at(wT-1); //intentionally redundant
+            approx_wT_minus_one_DL = W_Tt->at(wT-1); //intentionally redundant for readability
             wT_DL = round((approx_wT_minus_one_DL-part0)/part_width)+1.0;
             wT_DL = std::min(std::max(wT_DL,1), part_size);
             
@@ -133,8 +122,8 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
             //again, the state space: approx wealth, benchmark, time since last looked, & wealth since last looked
             //Now, for each element of the state space, we calculate the expected utility from looking
             //and not looking, conditional and the actual wealth that could be observed and the change in next period approx. wealth as a consequence.
-            term_A = 0.0; //reset/initialize term_A, term_A is the utility from looking
-            term_B = B_reset; //reset term_B, term_B is the utility from not looking
+            u_look = 0.0; //reset/initialize u_look, u_look is the utility from looking
+            u_dont_look = u_dont_look_reset; //reset u_dont_look, u_dont_look is the utility from not looking
             
             //Mean of the conditional wealth distribution
             m = log(W_Tt->at(wT-1))*(1-(corr*(std_rpt/std_rmt))) + log(approx_w->at(w-1))*(corr*(std_rpt/std_rmt)) + t*delta_t*(mean_rpt - (corr*(std_rpt/std_rmt))*mean_rmt); //mean
@@ -149,20 +138,21 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
               //Grabbing one of the elements of the actual wealth partition
               act_w_x = act_w[(k-1)]; //use (k-1) b/c the first element of vectors is zero, but we iterate from 1 to numDraws
               act_w_x_1 = act_w[(k-2)];
+              act_w_x_avg = (act_w_x+act_w_x_1)/2;
               //using the lognorm pdf to get the probability of that draw
-              conditional_prob = lognorm_pdf((act_w_x+act_w_x_1)/2,m,v);
+              conditional_prob = lognorm_pdf(act_w_x_avg,m,v);
               
               //%%%%%%%%%%%%%% TERM A Part 1 %%%%%%%%%%%%%%%%
-              term_A = term_A + utility(((act_w_x+act_w_x_1)/2), bench->at(b-1), A, G)*conditional_prob*(act_w_x-act_w_x_1);
+              u_look = u_look + utility_look(act_w_x_avg, bench->at(b-1), A, G)*conditional_prob*(act_w_x-act_w_x_1);
               
               //Next period benchmark if looks
-              bench_minus_one_L = D*((act_w_x+act_w_x_1)/2) + (1.0-D)*(bench->at(b-1));
+              bench_minus_one_L = update_benchmark(act_w_x_avg, bench->at(b-1), D);
               //Determining the partition index of the nearest benchmark value to bench_minus_one_L
               b_L = 1.0*round((bench_minus_one_L-part0)/part_width)+1.0;
               b_L = std::min(std::max(b_L,1), part_size);
               
               // Determining the wealth since last looked for future period, if looked
-              approx_wT_minus_one_L = (act_w_x+act_w_x_1)/2; //intentionally redundant
+              approx_wT_minus_one_L = act_w_x_avg; //intentionally redundant
               wT_L = 1.0*round((approx_wT_minus_one_L-part0)/part_width)+1.0;
               wT_L = std::min(std::max(wT_L,1), part_size);
               
@@ -171,7 +161,7 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
               //Note: since we are using discrete values, we will do a Riemann sum approximation
               //of the expected value of the J function
               for(int j = 1; j <= disc_size; j++){ //
-                approx_w_minus_one_L = (exp((disc->at(0)).at(j-1)))*((act_w_x+act_w_x_1)/2); //if looks, grow future period approx. wealth off of the actual wealth seen in current period
+                approx_w_minus_one_L = (exp((disc->at(0)).at(j-1)))*(act_w_x_avg); //if looks, grow future period approx. wealth off of the actual wealth seen in current period
                 approx_w_minus_one_DL = (exp((disc->at(0)).at(j-1)))*(approx_w->at(w-1)); //if doesn't look, grow future approx. wealth off of current approx. wealth
                 //determining the partition index of the nearest approx. wealth to approx_w_minus_one
                 w_L = 1.0*round((approx_w_minus_one_L-part0)/part_width)+1.0;
@@ -203,23 +193,23 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
                 }
                 
                 //%%%%%%%%%%%%%% TERM A Part 2 %%%%%%%%%%%%%%%%
-                term_A = term_A + B*Jvec_L*total_prob;
+                u_look = u_look + B*Jvec_L*total_prob;
                 
                 //%%%%%%%%%%%%%% TERM B Part 2 %%%%%%%%%%%%%%%%
-                term_B = term_B + B*Jvec_DL*total_prob;
+                u_dont_look = u_dont_look + B*Jvec_DL*total_prob;
               }
             }
             //determine whether term A or B is greater and add appropriate new row to w_b_Tt_WTt_action_utility
             //I don't know why the last two columns are necessary
-            if(term_A >= term_B) {
+            if(u_look >= u_dont_look) {
               //Utility(look) >= Utility(don't look)
               (new_LDL->at(0)).at(x-1) = 1.0;
-              (new_LDL->at(1)).at(x-1) = term_A;
+              (new_LDL->at(1)).at(x-1) = u_look;
             }
             else{
               //Utility(look) < Utility(don't look)
               (new_LDL->at(0)).at(x-1) = 0.0;
-              (new_LDL->at(1)).at(x-1) = term_B;
+              (new_LDL->at(1)).at(x-1) = u_dont_look;
             }
             x = x + 1; //move to the next element of the state space and determine the look decision and associated utility consequence
           }
