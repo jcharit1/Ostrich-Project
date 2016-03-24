@@ -1,6 +1,0 @@
-#Launching Program One
-./bin/ProgramOneFinalRS /media/windows7/Users/Charite/Dropbox/Nachum/OstrichCPP/AWSCode/Ostrich/investorData/cluster/cluster74/88808sample74.txt 88808 504 set1 0.0 0.0 3.0 1.0 0.5 10.0 10 1 RS 1000 0.001 0.001 Personal F T
-
-./bin/ProgramOneFinalRSB0 /media/windows7/Users/Charite/Dropbox/Nachum/OstrichCPP/AWSCode/Ostrich/investorData/cluster/cluster74/88808sample74.txt 88808 504 set1 0.0 0.0 3.0 1.0 0.5 10.0 10 1 RS 1000 0.001 0.001 Personal F T
-
-#Launching the Parent Program

@@ -36,7 +36,11 @@ std::string investorResultsFileName(std::string sys, std::string sample, std::st
   if (sys == "Personal"){
     //on Personal
     baseDir = "/media/windows7/Users/Charite/Dropbox/Nachum/OstrichCPP/AWSCode/Ostrich/investorOutput/cluster/cluster"+cl+"/thread"+zthread;
-  }  
+  }
+  if (sys == "Test"){
+    //running test on fake data
+    baseDir = "../test/test_output";
+  }   
   
   fullFileName = baseDir+"/"+fileName;
   

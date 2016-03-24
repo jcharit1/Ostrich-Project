@@ -25,6 +25,10 @@ std::string programLocation(std::string programName, std::string sys) {
     //on Personal Laptop
     baseDir = "/home/jim/Dropbox/Nachum/OstrichCPP/AWSCode/Ostrich/code/bin";
   }
+  if (sys == "Test"){
+    //running test
+    baseDir = ".";
+  }
   
   fullFileName = baseDir+"/"+programName;
   

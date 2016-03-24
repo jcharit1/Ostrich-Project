@@ -71,4 +71,9 @@ clean_RS_D:
 clean_B0_D:
 	rm $(EXE_B0_D) *~
 
+test_1:
+	./bin/ProgramOneFinalRSB0 ./test/test_investor_data/88808sample74.txt 88808 504 Test 0.0 0.0 3.0 1.0 0.5 10.0 10 1 RS 1000 0.001 0.001 Test F T
+
+test_2:
+	./bin/ProgramOneFinalRS ./test/test_investor_data/88808sample74.txt 88808 504 Test 0.0 0.8 3.0 1.0 0.5 10.0 10 1 RS 1000 0.001 0.001 Test F T
 
