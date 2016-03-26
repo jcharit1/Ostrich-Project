@@ -54,25 +54,25 @@ $(EXE_B0_D): $(SOURCES_B0_D) $(SOURCES)
 	$(CC) $(CFLAGS) $(LIB) $(INC) $(SOURCES_B0_D) $(SOURCES) -o bin/$(EXE_B0_D)
 
 clean:
-	rm $(EXE_RS) $(EXE_B0) $(EXE_Par) *~ $(EXE_RS_D) $(EXE_B0_D)
+	rm bin/$(EXE_RS) bin/$(EXE_B0) bin/$(EXE_Par) bin/$(EXE_RS_D) bin/$(EXE_B0_D) *~ test/*~ doc/*~
 
 clean_RS:
-	rm $(EXE_RS) *~
+	rm bin/$(EXE_RS) *~ test/*~ doc/*~
 
 clean_B0:
-	rm $(EXE_B0) *~
+	rm bin/$(EXE_B0) *~ test/*~ doc/*~
 
 clean_Par:
-	rm $(EXE_Par) *~
+	rm bin/$(EXE_Par) *~ test/*~ doc/*~
 
 clean_RS_D:
-	rm $(EXE_RS_D) *~
+	rm bin/$(EXE_RS_D) *~ test/*~ doc/*~
 
 clean_B0_D:
-	rm $(EXE_B0_D) *~
+	rm bin/$(EXE_B0_D) *~ test/*~ doc/*~
 
 clean_back_up:
-	rm *~ 
+	rm *~ test/*~ doc/*~ 
 
 test_1:
 	./bin/ProgramOneFinalRSB0 ./test/test_investor_data/88808sample74.txt 88808 504 Test 0.0 0.0 3.0 1.0 0.5 10.0 10 1 RS 1000 0.001 0.001 Test F T

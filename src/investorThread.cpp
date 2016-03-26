@@ -132,7 +132,8 @@ void investorThread(long double A, long double B, long double G, long double D, 
   Allfits->at(3)[0] = G;
   Allfits->at(4)[0] = D;
   Allfits->at(5)[0] = T;
-  Allfits->at(6)[0] = fits;
+  Allfits->at(6)[0] = num_partitions;
+  Allfits->at(7)[0] = fits;
   std::cout << "Fit: " << fits << std::endl;
   
   exportInvestorData(Allfits, investor, num_partitions, delimit, input_file_name, sample, z, sys);

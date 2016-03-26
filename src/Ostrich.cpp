@@ -17,8 +17,8 @@ Program one of the Ostrich project
 
 int main(int argc, char *argv[]){
     //Parameters necessary for pulling the data
-	std::string file_path = argv[1]; //path of the data
-	std::string sample = argv[2]; //sample
+	  std::string file_path = argv[1]; //path of the data
+	  std::string sample = argv[2]; //sample
     std::string mrow = argv[3]; //# of rows in the data
     std::string input_file_name = argv[4]; //name associated with the parameter space
 
@@ -243,7 +243,7 @@ int main(int argc, char *argv[]){
         //Preallocate memory for all_fits std::vector for speed
         //six is the number of parameters
         std::vector<long double> allfitsvec(1,0);
-        std::vector<std::vector<long double> > allfits(num_para+2, allfitsvec); //plus the fit
+        std::vector<std::vector<long double> > allfits(num_para+3, allfitsvec); //plus the fit
         std::vector<long double>().swap(allfitsvec); //destroy allfitsvec
 
         //Dims of the LDL vectors
