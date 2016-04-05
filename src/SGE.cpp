@@ -41,7 +41,7 @@ void getSGECom(std::string sys, std::vector<std::string>* comVec, std::string me
   }
   if (sys == "CBS"){
     //on the Columbia B-school servers
-    leadingCom = "/apps/wrappers/sge_run --grid_quiet --grid_submit=batch --grid_mem="+memRequest+" \"";
+    leadingCom = "/apps/wrappers/sge_run --grid_quiet --grid_submit=batch --grid_mem="+memRequest+" \"ulimit -c 0; ";
     endingCom = "\" \n";
   }
   comVec->at(0) = leadingCom;

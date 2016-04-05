@@ -54,25 +54,25 @@ $(EXE_B0_D): $(SOURCES_B0_D) $(SOURCES)
 	$(CC) $(CFLAGS) $(LIB) $(INC) $(SOURCES_B0_D) $(SOURCES) -o bin/$(EXE_B0_D)
 
 clean:
-	rm bin/$(EXE_RS) bin/$(EXE_B0) bin/$(EXE_Par) bin/$(EXE_RS_D) bin/$(EXE_B0_D) *~ test/*~ doc/*~ src/*Rhistory
+	rm bin/$(EXE_RS) bin/$(EXE_B0) bin/$(EXE_Par) bin/$(EXE_RS_D) bin/$(EXE_B0_D) *~ test/*~ doc/*~ src/*Rhistory src/*~ include/*~
 
 clean_RS:
-	rm bin/$(EXE_RS) *~ test/*~ doc/*~ src/*Rhistory
+	rm bin/$(EXE_RS) *~ test/*~ doc/*~ src/*Rhistory src/*~ include/*~
 
 clean_B0:
-	rm bin/$(EXE_B0) *~ test/*~ doc/*~ src/*Rhistory
+	rm bin/$(EXE_B0) *~ test/*~ doc/*~ src/*Rhistory src/*~ include/*~
 
 clean_Par:
-	rm bin/$(EXE_Par) *~ test/*~ doc/*~ src/*Rhistory
+	rm bin/$(EXE_Par) *~ test/*~ doc/*~ src/*Rhistory src/*~ include/*~
 
 clean_RS_D:
-	rm bin/$(EXE_RS_D) *~ test/*~ doc/*~ src/*Rhistory
+	rm bin/$(EXE_RS_D) *~ test/*~ doc/*~ src/*Rhistory src/*~ include/*~
 
 clean_B0_D:
-	rm bin/$(EXE_B0_D) *~ test/*~ doc/*~ src/*Rhistory
+	rm bin/$(EXE_B0_D) *~ test/*~ doc/*~ src/*Rhistory src/*~ include/*~
 
 clean_back_up:
-	rm *~ test/*~ doc/*~ src/*Rhistory
+	rm *~ test/*~ doc/*~ src/*Rhistory src/*~ include/*~
 
 test_1:
 	./bin/ProgramOneFinalRSB0 ./test/test_investor_data/88808sample74.txt 88808 504 Test 0.0 0.0 3.0 1.0 0.5 10.0 10 1 RS 1000 0.001 0.001 Test F T
