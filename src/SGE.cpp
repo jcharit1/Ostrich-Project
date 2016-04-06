@@ -22,7 +22,15 @@ std::string getMemRequest(std::string programOneVersion, std::vector<std::string
   //Now determine the memory request by system
   if (programOneVersion == "ProgramOneFinalRS" or programOneVersion == "ProgramOneFinalRS_Detailed"){
     if (sys == "CBS"){
+      if (maxNPart <= 100){
         memRequest = "2G";
+      }
+      if ((maxNPart > 100) & (maxNPart <= 200)){
+        memRequest = "5G";
+      }
+      if ((maxNPart > 200) & (maxNPart <= 300)){
+        memRequest = "6G";
+      }
     }
   }
   
