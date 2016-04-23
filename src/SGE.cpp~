@@ -44,7 +44,7 @@ void getSGECom(std::string sys, std::vector<std::string>* comVec, std::string me
   std::string leadingCom, endingCom;
   if ((sys == "AWSEBS") | (sys == "AWSNOV")){
     //on the EBS-backed amazon servers
-    leadingCom = "qsub -V -b y -cwd -o /dev/null -e /dev/null \"ulimit -c 0; ";
+    leadingCom = "qsub -V -b y -cwd -N \"ProgramOne\" -o /dev/null -e /dev/null \"ulimit -c 0; ";
     endingCom = "\" \n";
   }
   if (sys == "CBS"){
