@@ -17,5 +17,5 @@ do
 	grep "$NAMEID" $OUTDIR$OUTFILE.txt | grep "thread$TH/" > $OUTDIR$SUBOUTFILE$TH.txt
 
 	#calling another script to aggregate temp_file_list_thread$TH.txt
-	/apps/wrappers/sge_run --grid_quiet --grid_submit=batch --grid_mem=300M "$SUBSCRIPT $SUBOUTFILE$TH.txt $TH $OUTDIR"
+	/apps/wrappers/sge_run --grid_quiet --grid_submit=batch --grid_mem=300M "sh $SUBSCRIPT $SUBOUTFILE$TH.txt $TH $OUTDIR"
 done
