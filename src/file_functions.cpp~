@@ -17,7 +17,7 @@ bool fileExist(std::string name) {
   }
 }
 
-bool fileExistStat(const std::string& name) {
+bool fileExistsStat(const std::string& name) {
   struct stat buf;
   return (stat(name.c_str(), &buf) == 0);
 }

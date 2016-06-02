@@ -6,7 +6,7 @@
 #include <string>
 
 bool fileExist(std::string name);
-bool fileExistStat(const std::string& name);
+bool fileExistsStat(const std::string& name);
 long double countFileLines(std::string fileName);
 
 #endif

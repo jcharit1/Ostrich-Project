@@ -83,7 +83,7 @@ bool getRestorePoint(std::string restoreFile, std::vector<std::vector<long doubl
 void createRestorePoint(std::string restoreFile, std::vector<std::vector<long double> >* new_LDL, std::vector<std::vector<long double> >* prev_LDL, long double period, std::string checkPoint){
   if (checkPoint == "T") {
     //Removing the current file if it exist
-    if (fileExistStat(restoreFile)) {
+    if (fileExist(restoreFile)) {
       std::string comd = "rm "+restoreFile;
       std::cout << "Removing the old restore point ..." << std::endl;
       int sysMsg = system(comd.c_str());
