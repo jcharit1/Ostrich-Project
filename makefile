@@ -7,9 +7,17 @@ LIB=-std=c++0x -pthread
 INC= -I include
 SRCDIR= src
 
-#Shared sources
-FILES= Ostrich.cpp combinatorial.cpp distribution.cpp file_functions.cpp investor_data.cpp investorResultsFileName.cpp makeActWealthPart.cpp makeComparable.cpp mix.cpp NDiscrete.cpp part_functions.cpp restore_point.cpp splitLinetoVec.cpp  vec_functions.cpp vec_stat.cpp utility.cpp
+#Shared sourcesEXE_RS
+FILES= Ostrich.cpp combinatorial.cpp distribution.cpp file_functions.cpp investor_data.cpp investorResultsFileName.cpp makeActWealthPart.cpp makeComparable.cpp mix.cpp NDiscrete.cpp part_functions.cpp restore_point.cpp splitLinetoVec.cpp  vec_functions.cpp vec_stat.cpp
 SOURCES = $(FILES:%.cpp=$(SRCDIR)/%.cpp)
+
+#Standard Utility
+FILES_STD_UTILITY=utility.cpp
+SOURCES_STD_UTILITY = $(FILES_STD_UTILITY:%.cpp=$(SRCDIR)/%.cpp)
+
+#Johns 08-06-2016 Alt utility
+FILES_ALT_UTILITY_EXP1=utility_exp_1.cpp
+SOURCES_ALT_UTILITY_EXP1 = $(FILES_ALT_UTILITY_EXP1:%.cpp=$(SRCDIR)/%.cpp)
 
 #Riemann Sum version
 FILES_RS=J_RS.cpp investorThread.cpp 
@@ -38,20 +46,20 @@ EXE_Par=ParentOstrich
 
 all: $(EXE_RS) $(EXE_B0) $(EXE_Par) $(EXE_RS_D) $(EXE_B0_D)
 
-$(EXE_RS): $(SOURCES_RS) $(SOURCES)
-	$(CC) $(CFLAGS) $(LIB) $(INC) $(SOURCES_RS) $(SOURCES) -o bin/$(EXE_RS)
+$(EXE_RS): $(SOURCES_RS) $(SOURCES_ALT_UTILITY_EXP1) $(SOURCES)
+	$(CC) $(CFLAGS) $(LIB) $(INC) $(SOURCES_ALT_UTILITY_EXP1) $(SOURCES_RS) $(SOURCES) -o bin/$(EXE_RS)
 
-$(EXE_B0): $(SOURCES_B0) $(SOURCES) 
-	$(CC) $(CFLAGS) $(LIB) $(INC) $(SOURCES_B0) $(SOURCES) -o bin/$(EXE_B0)
+$(EXE_B0): $(SOURCES_B0) $(SOURCES_ALT_UTILITY_EXP1) $(SOURCES) 
+	$(CC) $(CFLAGS) $(LIB) $(INC) $(SOURCES_B0) $(SOURCES_ALT_UTILITY_EXP1) $(SOURCES) -o bin/$(EXE_B0)
 
 $(EXE_Par): $(SOURCES_Par)
 	$(CC) $(CFLAGS) $(LIB) $(INC) $(SOURCES_Par) -o bin/$(EXE_Par)
 
-$(EXE_RS_D): $(SOURCES_RS_D) $(SOURCES)
-	$(CC) $(CFLAGS) $(LIB) $(INC) $(SOURCES_RS_D) $(SOURCES) -o bin/$(EXE_RS_D)
+$(EXE_RS_D): $(SOURCES_RS_D) $(SOURCES_ALT_UTILITY_EXP1) $(SOURCES)
+	$(CC) $(CFLAGS) $(LIB) $(INC) $(SOURCES_RS_D) $(SOURCES_ALT_UTILITY_EXP1) $(SOURCES) -o bin/$(EXE_RS_D)
 
-$(EXE_B0_D): $(SOURCES_B0_D) $(SOURCES) 
-	$(CC) $(CFLAGS) $(LIB) $(INC) $(SOURCES_B0_D) $(SOURCES) -o bin/$(EXE_B0_D)
+$(EXE_B0_D): $(SOURCES_B0_D) $(SOURCES_ALT_UTILITY_EXP1) $(SOURCES) 
+	$(CC) $(CFLAGS) $(LIB) $(INC) $(SOURCES_B0_D) $(SOURCES_ALT_UTILITY_EXP1) $(SOURCES) -o bin/$(EXE_B0_D)
 
 clean:
 	rm bin/$(EXE_RS) bin/$(EXE_B0) bin/$(EXE_Par) bin/$(EXE_RS_D) bin/$(EXE_B0_D) *~ test/*~ doc/*~ src/*Rhistory src/*~ include/*~
