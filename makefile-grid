@@ -8,7 +8,7 @@ INC= -I include
 SRCDIR= src
 
 #Shared sourcesEXE_RS
-FILES= Ostrich.cpp combinatorial.cpp distribution.cpp file_functions.cpp investor_data.cpp investorResultsFileName.cpp makeActWealthPart.cpp makeComparable.cpp mix.cpp NDiscrete.cpp part_functions.cpp restore_point.cpp splitLinetoVec.cpp  vec_functions.cpp vec_stat.cpp
+FILES= Ostrich.cpp combinatorial.cpp distribution.cpp file_functions.cpp investor_data.cpp investorResultsFileName.cpp makeActWealthPart.cpp makeComparable.cpp mix.cpp NDiscrete.cpp part_functions.cpp restore_point.cpp splitLinetoVec.cpp vec_functions.cpp vec_stat.cpp
 SOURCES = $(FILES:%.cpp=$(SRCDIR)/%.cpp)
 
 #Standard Utility
