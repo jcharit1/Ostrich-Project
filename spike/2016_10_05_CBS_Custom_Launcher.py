@@ -47,7 +47,7 @@ def getInvestorList():
 
 # get the parameter lists
 ###############################################################################
-parameter_list_path='/user/user1/jc4144/Nachum/Ostrich/parameters/test20161005.txt'
+parameter_list_path='/user/user1/jc4144/Nachum/Ostrich/parameters/set20160916Delta.txt'
 parameter_list=pd.read_csv(parameter_list_path,header=None,delimiter=' ')
 parameter_list=parameter_list.transpose()
 parameter_list.columns=['alpha','beta','gamma','delta','theta','tmax','partition']
