@@ -8,6 +8,7 @@ Created on Wed Oct  5 19:38:27 2016
 # Import functions
 ###############################################################################
 import pandas as pd
+import os
 
 # Define needed functions
 ###############################################################################
@@ -74,8 +75,9 @@ for inv in investor_list['investor']:
                         for TM in tmaxs:
                             for P in partitions:
                                 str_command=getProgramCommand(inv,A,B,G,D,TH,TM,P,counter)
+                                os.system(str_command)
                                 counter=counter+1
-                                print(str_command)
+
 
 
 
