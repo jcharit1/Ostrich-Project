@@ -62,8 +62,9 @@ partitions=parameter_list[parameter_list.partition.notnull()]['partition']
 # get commands
 ###############################################################################
 investor_list=getInvestorList()
+investor_list.columns =['investor']
 
-for inv in investor_list:
+for inv in investor_list['investor']:
     counter=1
     for A in alphas:
         for B in betas:
