@@ -11,7 +11,6 @@
 #include "SGE.h"
 #include <string> 
 #include <vector>
-#include <iostream>
 
 int main(int argc, char *argv[]){
   /*
@@ -84,7 +83,6 @@ int main(int argc, char *argv[]){
   //looping over investors
   for(int i = 0; i < (signed int) investorList.size(); i++){
     std::string investor = investorList.at(i);
-	std::cout << "investor: " << investor << "\n";
     std::string investorDataFile = investorDataFileName(sys, sample, investor)+".txt";
     int z = 1;
     //loopingover parameters
