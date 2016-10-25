@@ -37,7 +37,7 @@ std::string getMemRequest(std::string programOneVersion, std::vector<std::string
   return memRequest;
 }
 
-void getSGECom(std::string sys, std::vector<std::string>* comVec, std::string memRequest) {
+void getSGECom(std::string sys, std::vector<std::string>* comVec, std::string memRequest, std::string gen_error_out_files) {
   /*
    Returns the leading and ending commands for sge
    */
@@ -49,7 +49,13 @@ void getSGECom(std::string sys, std::vector<std::string>* comVec, std::string me
   }
   if (sys == "CBS"){
     //on the Columbia B-school servers
-    leadingCom = "/apps/wrappers/sge_run --grid_quiet --grid_submit=batch --grid_mem="+memRequest+" \"ulimit -c 0; ";
+    if(gen_error_out_files=="T"){
+      leadingCom = "/apps/wrappers/sge_run --grid_submit=batch --grid_mem="+memRequest+" \"ulimit -c 0; ";
+    }
+    else{
+      leadingCom = "/apps/wrappers/sge_run --grid_quiet --grid_submit=batch --grid_mem="+memRequest+" \"ulimit -c 0; ";
+    }
+    
     endingCom = "\" \n";
   }
   comVec->at(0) = leadingCom;

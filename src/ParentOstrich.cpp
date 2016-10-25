@@ -45,6 +45,7 @@ int main(int argc, char *argv[]){
   //Dealing with restore files
   std::string checkPoint = argv[14]; //T or F, make restore files?
   std::string overWriteRestore = argv[15]; //T or F, ignore restore points and start from scratch
+  std::string gen_error_out_files = argv[16]; //T or F, based to remain false
   
   //Creating the std::vector of investor IDs
   int max_row = atoi(inv_set_size.c_str());
@@ -92,7 +93,7 @@ int main(int argc, char *argv[]){
       programName= getProgramName(programOneVersion ,beta[b]);
       programPath = programLocation(programName, sys);
       memRequest = getMemRequest(programName, &npart, MCNum_str, sys); //mem request
-      getSGECom(sys, &comVec, memRequest);
+      getSGECom(sys, &comVec, memRequest, gen_error_out_files);
       sgeLeadingCom = comVec[0];
       sgeEndingCom = comVec[1];
       
