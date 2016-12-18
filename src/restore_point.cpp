@@ -9,17 +9,14 @@
 
 bool getRestorePoint(std::string restoreFile, std::vector<std::vector<long double> >* new_LDL, std::vector<std::vector<long double> >* prev_LDL, long double LDL_num_rows, long double LDL_num_cols, long double* period, std::string checkPoint) {
   if (checkPoint == "F"){
-    std::cout << "Did not select the check point option" << std::endl;
     return false;
   }
 
   //checking iF file can be opened and the number of lines in the file is correct
   long double rightNumLines = 2*LDL_num_cols*LDL_num_rows + 1; //2*(# of cols in LDL vecs)*(# of rows in LDL vecs)*2 + 1, plus 1 for the period var and times 2 for the prev_LDL and new_LDL vectors
   bool proceed = false;
-  std::cout << "Checking if I can open the restore point ..." << std::endl;
   if (fileExistStat(restoreFile)){
     //it exist but was state saving processing interrupted before all the necessary data was saved?
-    std::cout << "Checking if the restore point has the right number of lines ..." << std::endl;
     proceed = (countFileLines(restoreFile)==rightNumLines);
   }
 
@@ -70,12 +67,10 @@ bool getRestorePoint(std::string restoreFile, std::vector<std::vector<long doubl
     inFile.getline (wholerow,1000);
     inFile.close(); //close the file
     //I imported it with all the expected rows
-    std::cout << "Getting the restore point ..." << std::endl;
     return true;
   }
   else {
     //can't open it, start over
-    std::cout << "Failed to get the restore point, starting over ..." << std::endl;
     return false;
   }
 }
@@ -85,7 +80,6 @@ void createRestorePoint(std::string restoreFile, std::vector<std::vector<long do
     //Removing the current file if it exist
     if (fileExistStat(restoreFile)) {
       std::string comd = "rm "+restoreFile;
-      std::cout << "Removing the old restore point ..." << std::endl;
       int sysMsg = system(comd.c_str());
     }
 

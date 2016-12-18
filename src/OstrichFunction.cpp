@@ -41,7 +41,6 @@ long double OstrichFunction(std::string file_path, int max_row, long double A, l
 
     //End if the data set is empty
     if((all_data[0]->at(0) == 0) & (all_data[1]->at(0)  == 0) & (all_data[2]->at(0)  == 0) & (all_data[3]->at(0)  == 0)){
-        std::cout << "Empty dataset!" << std::endl;
         return 0;
     }
     //Getting investor IDs, the first column of data and generating investor level data
@@ -80,7 +79,6 @@ long double OstrichFunction(std::string file_path, int max_row, long double A, l
     int first_look_index = findInLDVector(&(investor_all[i][1]), 1.0); // Note on "investor_all[i][1]" i refers to the ith investor dataset, 1 is the look/notlook col of that dataset
     int days = (investor_all[i][1]).size() - first_look_index - countInLDVec(&(investor_all[i][1]), missing) + 1; //Number of days left
     if (days == 0){
-        std::cout << "There are just " << days << " days left! Exiting program." << std::endl;
         return 0;
     }
 
@@ -105,7 +103,6 @@ long double OstrichFunction(std::string file_path, int max_row, long double A, l
     //Stopping if investors never look or always look
     int look_sum = sumVec(&(investordata_NaNfree[1]));
     if ((look_sum == 0) | (look_sum == (signed int) (investordata_NaNfree[1]).size())){
-        std::cout << "Error: investor never looked or always looked!" << std::endl;
         return 0;
     }
 
@@ -155,7 +152,6 @@ long double OstrichFunction(std::string file_path, int max_row, long double A, l
     long double abs_wl = std::min(p_wl, m_wl);
     long double abs_wu = std::max(p_wu, m_wu);
     if (abs_wu == abs_wl){
-        std::cout << "The partition bounds are equal to each other. Exiting the program!" << std::endl;
         return 0;
     }
 

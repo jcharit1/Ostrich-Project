@@ -18,16 +18,13 @@ long double investorThreadFunction(long double A, long double B, long double G, 
   
   period = 0.0;
   prev_LDL = new_LDL;
-  std::cout << "Starting period " << period << " ..." << std::endl;
   J(&new_LDL,  LDL_num_rows, LDL_num_cols, part, part->size(), disc, disc->size(), t_max, corr, betap, mean_rmt, mean_rpt, std_rmt, std_rpt, A, B, G, D, T, period, Jvec, EUType_str, MCNum, alpha_CI, error_pct);
   period = period + 1.0;
   prev_LDL = new_LDL;
-  std::cout << "Starting period " << period << " ..." << std::endl;
   J(&new_LDL,  LDL_num_rows, LDL_num_cols, part, part->size(), disc, disc->size(), t_max, corr, betap, mean_rmt, mean_rpt, std_rmt, std_rpt, A, B, G, D, T, period, Jvec, EUType_str, MCNum, alpha_CI, error_pct);
   period = period + 1.0;
   while (isEqual(&(prev_LDL[0]),&(new_LDL[0])) == false){
     prev_LDL = new_LDL;
-    std::cout << "Starting period " << period << " ..." << std::endl;
     J(&new_LDL, LDL_num_rows, LDL_num_cols, part, part->size(), disc, disc->size(), t_max, corr, betap, mean_rmt, mean_rpt, std_rmt, std_rpt, A, B, G, D, T, period, &prev_LDL, EUType_str, MCNum, alpha_CI, error_pct);
     period = period + 1.0;
   }

@@ -219,5 +219,4 @@ void J(std::vector<std::vector<long double> >* new_LDL, long double LDL_num_rows
   }
   //create the restore point before exiting the J() function
   createRestorePoint(restorePoint, new_LDL, Jvec, period, checkPoint);
-  std::cout << "Completed period " << (int) period << ": " << ((float) (clock() - t))/CLOCKS_PER_SEC << " seconds" << std::endl;
 }

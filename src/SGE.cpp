@@ -1,6 +1,7 @@
 //in SGE.cpp
 
 #include "SGE.h"
+#include "investorResultsFileName.h"
 
 std::string getMemRequest(std::string programOneVersion, std::vector<std::string>* npart, std::string MCNum_str, std::string sys){
   /*
@@ -37,7 +38,7 @@ std::string getMemRequest(std::string programOneVersion, std::vector<std::string
   return memRequest;
 }
 
-void getSGECom(std::string sys, std::vector<std::string>* comVec, std::string memRequest, std::string gen_error_out_files) {
+void getSGECom(std::string sys, std::string investor, std::string zthread, std::vector<std::string>* comVec, std::string memRequest, std::string gen_error_out_files) {
   /*
    Returns the leading and ending commands for sge
    */
@@ -50,7 +51,8 @@ void getSGECom(std::string sys, std::vector<std::string>* comVec, std::string me
   if (sys == "CBS"){
     //on the Columbia B-school servers
     if(gen_error_out_files=="T"){
-      leadingCom = "/apps/wrappers/sge_run --grid_submit=batch --grid_mem="+memRequest+" \"ulimit -c 0; ";
+      std::string chgDir = "cd "+investorResultsDirName(sys, investor, zthread)+"; ";
+      leadingCom = chgDir+"/apps/wrappers/sge_run --grid_submit=batch --grid_mem="+memRequest+" \"ulimit -c 0; ";
     }
     else{
       leadingCom = "/apps/wrappers/sge_run --grid_quiet --grid_submit=batch --grid_mem="+memRequest+" \"ulimit -c 0; ";

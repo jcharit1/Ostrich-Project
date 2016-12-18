@@ -15,16 +15,6 @@
 
 
 void investorThread(long double A, long double B, long double G, long double D, long double T, std::vector<std::vector<long double> >* Investordata_NaNfree, long double LDL_num_rows, long double LDL_num_cols, std::vector<long double >* part, std::vector<std::vector<long double > >* disc, std::vector<long double >* t_max, long double corr, long double betap, long double mean_rmt, long double mean_rpt, long double std_rmt, long double std_rpt, std::vector<std::vector<long double > >* Jvec, int first_look_index, long double missing, std::vector<std::vector<long double> >* Allfits, long double investor, int num_partitions, std::string delimit, std::string input_file_name, std::string sample, int z, std::vector<std::vector<long double > >* indexes, std::string EUType_str, long double MCNum, long double alpha_CI, long double error_pct, std::string sys, std::string overWriteRestore, long double baseWealth, std::string checkPoint) {
-  std::cout << "Investor: " << (int) investor << std::endl;
-  std::cout << "Parameter Set: " << z << std::endl;
-  std::cout << "Alpha: " << A << std::endl;
-  std::cout << "Beta: " << B << std::endl;
-  std::cout << "Gamma: " << G << std::endl;
-  std::cout << "Delta: " << D << std::endl;
-  std::cout << "Theta: " << T << std::endl;
-  std::cout << "T Max: " << t_max->at(0) << std::endl;
-  std::cout << "Partition: " << num_partitions << std::endl;
-  
   //intializing all the objects
   long double period;
   std::vector<std::vector<long double > > new_LDL, prev_LDL;
@@ -32,15 +22,12 @@ void investorThread(long double A, long double B, long double G, long double D, 
   //Run period zero
   std::string restoreFile = investorResultsFileName(sys, sample, std::to_string((int) investor), std::to_string(num_partitions), input_file_name, std::to_string(z))+"-restore.txt";
   if (overWriteRestore=="F"){
-    std::cout << "Trying to load the last retore point" << std::endl;
     //We want to start from the last check point
     if (getRestorePoint(restoreFile, &new_LDL, &prev_LDL, LDL_num_rows, LDL_num_cols, &period, checkPoint)) {
       //We were able to start from the last check point
-      std::cout << "Running from last restore point" << std::endl;
       period = period + 1.0;
       while (isEqual(&(prev_LDL[0]),&(new_LDL[0])) == false){
         prev_LDL = new_LDL;
-        std::cout << "Starting period " << period << " ..." << std::endl;
         J(&new_LDL, LDL_num_rows, LDL_num_cols, part, part->size(), disc, disc->size(), t_max, corr, betap, mean_rmt, mean_rpt, std_rmt, std_rpt, A, B, G, D, T, period, &prev_LDL, restoreFile, EUType_str, MCNum, alpha_CI, error_pct, checkPoint);
         period = period + 1.0;
       }
@@ -50,16 +37,13 @@ void investorThread(long double A, long double B, long double G, long double D, 
       //start fresh
       period = 0.0;
       prev_LDL = new_LDL;
-      std::cout << "Starting period " << period << " ..." << std::endl;
       J(&new_LDL,  LDL_num_rows, LDL_num_cols, part, part->size(), disc, disc->size(), t_max, corr, betap, mean_rmt, mean_rpt, std_rmt, std_rpt, A, B, G, D, T, period, Jvec, restoreFile, EUType_str, MCNum, alpha_CI, error_pct, checkPoint);
       period = period + 1.0;
       prev_LDL = new_LDL;
-      std::cout << "Starting period " << period << " ..." << std::endl;
       J(&new_LDL,  LDL_num_rows, LDL_num_cols, part, part->size(), disc, disc->size(), t_max, corr, betap, mean_rmt, mean_rpt, std_rmt, std_rpt, A, B, G, D, T, period, Jvec, restoreFile, EUType_str, MCNum, alpha_CI, error_pct, checkPoint);
       period = period + 1.0;
       while (isEqual(&(prev_LDL[0]),&(new_LDL[0])) == false){
         prev_LDL = new_LDL;
-        std::cout << "Starting period " << period << " ..." << std::endl;
         J(&new_LDL, LDL_num_rows, LDL_num_cols, part, part->size(), disc, disc->size(), t_max, corr, betap, mean_rmt, mean_rpt, std_rmt, std_rpt, A, B, G, D, T, period, &prev_LDL, restoreFile, EUType_str, MCNum, alpha_CI, error_pct, checkPoint);
         period = period + 1.0;
       }
@@ -67,20 +51,16 @@ void investorThread(long double A, long double B, long double G, long double D, 
   }
   else{
     //We don't want to start from the last check point
-    std::cout << "Running from the beginning" << std::endl;
     //start fresh
     period = 0.0;
     prev_LDL = new_LDL;
-    std::cout << "Starting period " << period << " ..." << std::endl;
     J(&new_LDL,  LDL_num_rows, LDL_num_cols, part, part->size(), disc, disc->size(), t_max, corr, betap, mean_rmt, mean_rpt, std_rmt, std_rpt, A, B, G, D, T, period, Jvec, restoreFile, EUType_str, MCNum, alpha_CI, error_pct, checkPoint);
     period = period + 1.0;
     prev_LDL = new_LDL;
-    std::cout << "Starting period " << period << " ..." << std::endl;
     J(&new_LDL,  LDL_num_rows, LDL_num_cols, part, part->size(), disc, disc->size(), t_max, corr, betap, mean_rmt, mean_rpt, std_rmt, std_rpt, A, B, G, D, T, period, Jvec, restoreFile, EUType_str, MCNum, alpha_CI, error_pct, checkPoint);
     period = period + 1.0;
     while (isEqual(&(prev_LDL[0]),&(new_LDL[0])) == false){
       prev_LDL = new_LDL;
-      std::cout << "Starting period " << period << " ..." << std::endl;
       J(&new_LDL, LDL_num_rows, LDL_num_cols, part, part->size(), disc, disc->size(), t_max, corr, betap, mean_rmt, mean_rpt, std_rmt, std_rpt, A, B, G, D, T, period, &prev_LDL, restoreFile, EUType_str, MCNum, alpha_CI, error_pct, checkPoint);
       period = period + 1.0;
     }
@@ -135,7 +115,7 @@ void investorThread(long double A, long double B, long double G, long double D, 
   Allfits->at(5)[0] = T;
   Allfits->at(6)[0] = num_partitions;
   Allfits->at(7)[0] = fits;
-  std::cout << "Fit: " << fits << std::endl;
+  std::cout << investor<< ", " << A << ", " << B << ", " << G << ", " << D << ", " << T << ", " << num_partitions << ", " << fits << std::endl;
   
   /* *****************************************************************************
    Creating a matrix of data to extract

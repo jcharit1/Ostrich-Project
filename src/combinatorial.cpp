@@ -6,7 +6,6 @@
 
 long double factorial(int n){
   if (n < 0) {
-    std::cout << "Warning, n < 0, returning NaN" << std::endl;
     return NAN;
   }
   if (n == 0) {

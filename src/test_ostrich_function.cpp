@@ -24,16 +24,6 @@ int main(){
     long double error_pct = 0.001;
   
     long double fit = OstrichFunction(file_path, max_row, A, B, G, D, T, T_Max, npart, MCNum, EUType_str, alpha_CI, error_pct);
-    std::cout << "Investor: " << (int) investor << std::endl;
-    std::cout << "Alpha: " << A << std::endl;
-    std::cout << "Beta: " << B << std::endl;
-    std::cout << "Gamma: " << G << std::endl;
-    std::cout << "Delta: " << D << std::endl;
-    std::cout << "Theta: " << T << std::endl;
-    std::cout << "T Max: " << T_Max << std::endl;
-    std::cout << "Partition: " << npart << std::endl;
-    std::cout << "Fit: " << fit << std::endl;
-    
     return 0;
 }
 

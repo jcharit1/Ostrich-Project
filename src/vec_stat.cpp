@@ -33,10 +33,6 @@ long double varVec(std::vector<long double>* vec, long double n){
 }
 
 void covMat(std::vector<std::vector<long double> >* cov_matrix, std::vector<long double>* v1, std::vector<long double>* v2, long double n){
-  if(v1->size() != v2->size()){
-    std::cout << "Error, can't calculate the covar matrix, std::vectors are not the same size" << std::endl;
-  }
-  
   //Note assumes cov_matrix is a 2x2 matrix
   long double varv1 = varVec(v1, 1.0);
   long double varv2 = varVec(v2, 1.0);

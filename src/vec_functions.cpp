@@ -33,9 +33,6 @@ void replaceMissing(std::vector<std::vector<long double> >* newVec, std::vector<
       }
     }
   }
-  else {
-    std::cout << "Warning: function replaceMissing only accepts an int 0 or 1 as its third argument, no changes made" << std::endl;
-  }
 }
 
 bool isEqual(std::vector<long double>* v1,std::vector<long double>* v2){

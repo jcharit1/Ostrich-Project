@@ -45,7 +45,7 @@ int main(int argc, char *argv[]){
   //Dealing with restore files
   std::string checkPoint = argv[14]; //T or F, make restore files?
   std::string overWriteRestore = argv[15]; //T or F, ignore restore points and start from scratch
-  std::string gen_error_out_files = argv[16]; //T or F, based to remain false
+  std::string gen_error_out_files = argv[16]; //T or F, create error files?
   
   //Creating the std::vector of investor IDs
   int max_row = atoi(inv_set_size.c_str());
@@ -93,9 +93,6 @@ int main(int argc, char *argv[]){
       programName= getProgramName(programOneVersion ,beta[b]);
       programPath = programLocation(programName, sys);
       memRequest = getMemRequest(programName, &npart, MCNum_str, sys); //mem request
-      getSGECom(sys, &comVec, memRequest, gen_error_out_files);
-      sgeLeadingCom = comVec[0];
-      sgeEndingCom = comVec[1];
       
       for(int a = 0; a< (signed int) alpha.size(); a++){
         for(int g = 0; g< (signed int) gamma.size(); g++){
@@ -115,6 +112,10 @@ int main(int argc, char *argv[]){
                   if ((fileExistStat(investorResultsFile)==false) or (writeOverResults == "T")){
                     //results file doesn't exist or I want to write over all results, run the file
                     //run only one set of parameters or it might override files with different results
+                    getSGECom(sys, investor, std::to_string(z), &comVec, memRequest, gen_error_out_files);
+                    sgeLeadingCom = comVec[0];
+                    sgeEndingCom = comVec[1];
+                    
                     command_str = sgeLeadingCom+programPath+char(32)+investorDataFile+" "+sample+" "+row+" "+input_file_name+" "+A+" "+B+" "+G+" "+D+" "+T+" "+TM+" "+NP+" "+std::to_string(z)+" "+EUType_str+" "+MCNum_str+" "+alpha_CI_str+" "+error_pct_str+" "+sys+" "+checkPoint+" "+overWriteRestore+sgeEndingCom;
                     catchSysCommand = system(command_str.c_str());
                   }
