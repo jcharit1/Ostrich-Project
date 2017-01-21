@@ -9,7 +9,7 @@ bdir='/NOBACKUP/scratch/jc4144/Nachum/Ostrich/'
 # find and aggregate them into one file
 ########################################################################
 strMatch="*"+oname+"*"
-outFile=bdir+oname+".txt"
+outFile=bdir+oname
 with open(outFile, "w") as fo:
 	for dirpath,dirnames,filenames in os.walk(bdir):
 		for files in filenames:
