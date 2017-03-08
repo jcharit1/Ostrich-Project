@@ -103,13 +103,13 @@ t_max=paras[paras.t_max.notnull()].t_max[0]
 all_results['z']=range(0+1,len(all_results)+1)
 
 #round the results
-all_results['investor']=row['investor'].round(0)
-all_results['alpha']=row['alpha'].round(1)
-all_results['beta']=row['beta'].round(1)
-all_results['gamma']=row['gamma'].round(1)
-all_results['delta']=row['delta'].round(1)
-all_results['theta']=row['theta'].round(1)
-all_results['partition']=row['partition'].round(0)
+all_results['investor']=all_results['investor'].round(0)
+all_results['alpha']=all_results['alpha'].round(1)
+all_results['beta']=all_results['beta'].round(1)
+all_results['gamma']=all_results['gamma'].round(1)
+all_results['delta']=all_results['delta'].round(1)
+all_results['theta']=all_results['theta'].round(1)
+all_results['partition']=all_results['partition'].round(0)
 
 # wrapper function to allow 
 def get_commands(row):
