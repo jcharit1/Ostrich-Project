@@ -5,6 +5,7 @@
 import os
 import sys
 import pandas as pd
+from itertools import product
 
 # Pull inputs
 ########################################################################
@@ -74,29 +75,63 @@ def run_simulation(investor,alpha,beta,gamma,delta,theta,t_max,partition,
     
     return command
     
-    
+# Creating the set of all possible combinations
+########################################################################
+all_results_cols=['investor']
+all_results_cols.extend(paras.columns)
+all_results =pd.DataFrame(list(product(inv_list[inv_list.investor.notnull()].investor,
+                                       paras[paras.alpha.notnull()].alpha,
+                                       paras[paras.beta.notnull()].beta,
+									   paras[paras.gamma.notnull()].gamma,
+									   paras[paras.delta.notnull()].delta,
+									   paras[paras.theta.notnull()].theta,
+									   paras[paras.t_max.notnull()].t_max,
+									   paras[paras.partition.notnull()].partition)),
+									   columns=all_results_cols)
+							   
+# adding current results flag
+########################################################################
+current_results['done']=1
+merge_on=['investor','alpha','beta','gamma','delta','theta','partition']
+all_results=pd.merge(all_results,current_results,how='left',on=merge_on)
+
+all_results=all_results[all_results.done.isnull()].copy()
+
 # Looping through the current results and running what is not there
 ########################################################################
-for investor in inv_list[inv_list.investor.notnull()].investor:
-    z=1
-    for alpha in paras[paras.alpha.notnull()].alpha:
-        for beta in paras[paras.beta.notnull()].beta:
-            for gamma in paras[paras.gamma.notnull()].gamma:
-                for delta in paras[paras.delta.notnull()].delta:
-                    for theta in paras[paras.theta.notnull()].theta:
-                        for t_max in paras[paras.t_max.notnull()].t_max:
-                            for partition in paras[paras.partition.notnull()].partition:
-                                z=z+1
-                                n_results=len(current_results[(current_results.investor==investor) & 
-                                                    (current_results.alpha==alpha) &
-                                                    (current_results.beta==beta) &
-                                                    (current_results.gamma==gamma) &
-                                                    (current_results.delta==delta) &
-                                                    (current_results.theta==theta) &
-                                                    (current_results.partition==partition)])
-                                if(n_results==0):
-                                    command=run_simulation(investor,alpha,beta,
-                                                           gamma,delta,theta,t_max,
-                                                           partition,para_path,z%500)
-                                    os.system(command)
-                                    
+t_max=paras[paras.t_max.notnull()].t_max[0]
+all_results['z']=range(0+1,len(all_results)+1)
+
+#round the results
+all_results['investor']=row['investor'].round(0)
+all_results['alpha']=row['alpha'].round(1)
+all_results['beta']=row['beta'].round(1)
+all_results['gamma']=row['gamma'].round(1)
+all_results['delta']=row['delta'].round(1)
+all_results['theta']=row['theta'].round(1)
+all_results['partition']=row['partition'].round(0)
+
+# wrapper function to allow 
+def get_commands(row):
+	result=run_simulation(row['investor'],
+	                      row['alpha'],
+						  row['beta'],
+                          row['gamma'],
+						  row['delta'],
+						  row['theta'],
+						  t_max,
+						  row['partition'],
+						  para_path,
+						  row['z']%500)
+	return result
+						  
+all_results['commands']=all_results.apply(get_commands, axis=1)
+
+#apply command
+all_results['command_results']=[os.system(s) for s in all_results.command]
+
+#save the results file
+temp=current_results_path.split('.')
+all_results_path=temp[0]+"_iter_results."+temp[1]
+all_results.to_csv(all_results_path, index=False)
+
