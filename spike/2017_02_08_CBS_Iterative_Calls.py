@@ -128,7 +128,7 @@ def get_commands(row):
 all_results['commands']=all_results.apply(get_commands, axis=1)
 
 #apply command
-all_results['command_results']=[os.system(s) for s in all_results.command]
+all_results['command_results']=[os.system(s) for s in all_results.commands]
 
 #save the results file
 temp=current_results_path.split('.')
