@@ -42,9 +42,12 @@ def run_simulation(investor,alpha,beta,gamma,delta,theta,t_max,partition,
         prog_path=prog_path+'ProgramOneFinalRS'
     
     #Defining the investor data path
-    clu=str(investor % 500)
-    inv_data_path='/user/user1/jc4144/Nachum/Ostrich/cluster/cluster'+str(clu)
-    inv_data_path=inv_data_path+'/88808sample'+str(round(investor))+'.txt'
+    clu=str(int(investor % 500))
+    investor=str(int(investor))
+    z=str(int(z))    
+    
+    inv_data_path='/user/user1/jc4144/Nachum/Ostrich/cluster/cluster'+clu
+    inv_data_path=inv_data_path+'/88808sample'+investor+'.txt'
     
     #Defining the parameter path
     para_file_name=para_path.split('/')[-1]
@@ -54,11 +57,11 @@ def run_simulation(investor,alpha,beta,gamma,delta,theta,t_max,partition,
     command=prog_path+' '+inv_data_path+' 88808 504 '+para_file_name+' '
     command=command+str(alpha)+' '+str(beta)+' '+str(gamma)+' '+str(delta)+' '
     command=command+str(theta)+' '+str(t_max)+' '+str(round(partition))+' '
-    command=command+str(z)+' RS 100 0.001 0.001 CBS F T'
+    command=command+z+' RS 100 0.001 0.001 CBS F T'
     
     #Defining prep command directory change
     dir_cd='cd /NOBACKUP/scratch/jc4144/Nachum/Ostrich/cluster/cluster'
-    dir_cd=dir_cd+clu+"/thread"+str(z)
+    dir_cd=dir_cd+clu+"/thread"+z
     
     #Defining the SGE command before command
     sge='/apps/wrappers/sge_run --grid_submit=batch --grid_mem=2G'
@@ -80,14 +83,14 @@ def run_simulation(investor,alpha,beta,gamma,delta,theta,t_max,partition,
 all_results_cols=['investor']
 all_results_cols.extend(paras.columns)
 all_results =pd.DataFrame(list(product(inv_list[inv_list.investor.notnull()].investor,
-                                       paras[paras.alpha.notnull()].alpha,
-                                       paras[paras.beta.notnull()].beta,
-									   paras[paras.gamma.notnull()].gamma,
-									   paras[paras.delta.notnull()].delta,
-									   paras[paras.theta.notnull()].theta,
-									   paras[paras.t_max.notnull()].t_max,
-									   paras[paras.partition.notnull()].partition)),
-									   columns=all_results_cols)
+                                                paras[paras.alpha.notnull()].alpha,
+                                                paras[paras.beta.notnull()].beta,
+                                                paras[paras.gamma.notnull()].gamma,
+                                                paras[paras.delta.notnull()].delta,
+                                                paras[paras.theta.notnull()].theta,
+                                                paras[paras.t_max.notnull()].t_max,
+                                                paras[paras.partition.notnull()].partition)),
+                                                columns=all_results_cols)
 							   
 # adding current results flag
 ########################################################################
@@ -113,17 +116,17 @@ all_results['partition']=all_results['partition'].round(0)
 
 # wrapper function to allow 
 def get_commands(row):
-	result=run_simulation(row['investor'],
-	                      row['alpha'],
-						  row['beta'],
+    result=run_simulation(row['investor'],
+                          row['alpha'],
+                          row['beta'],
                           row['gamma'],
-						  row['delta'],
-						  row['theta'],
-						  t_max,
-						  row['partition'],
-						  para_path,
-						  row['z']%500)
-	return result
+                          row['delta'],
+			      row['theta'],
+			      t_max,
+			      row['partition'],
+			      para_path,
+			      row['z']%500)
+    return result
 						  
 all_results['commands']=all_results.apply(get_commands, axis=1)
 
