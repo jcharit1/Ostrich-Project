@@ -1,0 +1,8 @@
+parameter,min,max
+alpha,.5,3
+beta,0,.99
+gamma,1,10
+delta,.5,1
+theta,.5,1
+t_max,10,10
+partition,50,50
