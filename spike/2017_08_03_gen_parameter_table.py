@@ -9,7 +9,7 @@ import numpy as np
 # Pull inputs
 ########################################################################
 num_paras=float(str(sys.argv[1]))
-sim_seed=float(str(sys.argv[2]))
+sim_seed=int(str(sys.argv[2]))
 para_bounds_path=str(sys.argv[3])
 para_table_path=str(sys.argv[4])
 
