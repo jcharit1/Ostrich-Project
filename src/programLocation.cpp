@@ -52,6 +52,12 @@ std::string getProgramName(std::string programOneVersion, std::string beta){
   if(BETA!=0 and programOneVersion=="Detailed"){
     programName = "ProgramOneFinalRS_Detailed";
   }
+  if(programOneVersion=="Simple_Alt_Utility"){
+    programName = "ProgramOneFinalAltUtility";
+  }
+  if(programOneVersion=="Detailed_Alt_Utility"){
+    programName = "ProgramOneFinalAltUtility_Detailed";
+  }
   
   return programName;
 }
