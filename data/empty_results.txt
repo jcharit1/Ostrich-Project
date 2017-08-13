@@ -1,0 +1,2 @@
+investor,alpha,beta,gamma,delta,theta,partition
+-1,-1,-1,-1,-1,-1,-1
