@@ -1,2 +1,2 @@
-investor,alpha,beta,gamma,delta,theta,partition
--1,-1,-1,-1,-1,-1,-1
+investor,alpha,beta,gamma,delta,theta,partition,fit
+-1,-1,-1,-1,-1,-1,-1,-1
