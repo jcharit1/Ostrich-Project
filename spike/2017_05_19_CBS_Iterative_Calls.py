@@ -15,6 +15,9 @@ para_path=str(sys.argv[2])
 current_results_path=str(sys.argv[3])
 max_grid_jobs=int(str(sys.argv[4]))
 max_ppt_use=float(str(sys.argv[5]))
+name_main_program=str(sys.argv[6])
+
+base_prog_path='/user/user1/jc4144/Nachum/Ostrich/code/bin/'
 
 # Upload inputs
 ########################################################################
@@ -45,19 +48,25 @@ def get_num_to_schedule(num_jimmy, num_all, max_grid_jobs,max_ppt_use):
     grid_friendly_use=int(max_ppt_use*(num_all+space_after_max))-num_jimmy
     space_to_use=int(min(grid_friendly_use, space_after_max))
     space_to_use=max(space_to_use,0)
-    return space_to_use    
+    return space_to_use   
+
+# Define Function to Get Program Name
+########################################################################
+def get_main_program_path(base_prog_path,name_main_program,beta):
+    if(name_main_program=="ProgramOneFinal"):
+        if(beta==0):
+            return base_prog_path+'ProgramOneFinalRSB0'
+        else:
+            return base_prog_path+'ProgramOneFinalRS'
+    if(name_main_program=="ProgramOneFinalAltUtility"):
+        return base_prog_path+name_main_program  
                          
 # Define Function Calls
 ########################################################################  
-def run_simulation(investor,alpha,beta,gamma,delta,theta,t_max,partition,
-                   para_path,z):              
+def run_simulation(investor,alpha,beta,gamma,delta,theta,t_max,partition,para_path,z):              
     
     #Defining the program path
-    prog_path='/user/user1/jc4144/Nachum/Ostrich/code/bin/'
-    if(beta==0):
-        prog_path=prog_path+'ProgramOneFinalRSB0'
-    else:
-        prog_path=prog_path+'ProgramOneFinalRS'
+    prog_path=get_main_program_path(base_prog_path,name_main_program,beta)
     
     #Defining the investor data path
     clu=str(int(investor % 500))
