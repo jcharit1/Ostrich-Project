@@ -110,6 +110,25 @@ del all_results['key']
 
 all_results_cols = all_results.columns
 
+# Cleaning results b/f merging
+########################################################################
+# round the results
+all_results['investor'] = all_results['investor'].round(0)
+all_results['alpha'] = all_results['alpha'].round(1)
+all_results['beta'] = all_results['beta'].round(1)
+all_results['gamma'] = all_results['gamma'].round(1)
+all_results['delta'] = all_results['delta'].round(1)
+all_results['theta'] = all_results['theta'].round(1)
+all_results['partition'] = all_results['partition'].round(0)
+
+current_results['investor'] = current_results['investor'].round(0)
+current_results['alpha'] = current_results['alpha'].round(1)
+current_results['beta'] = current_results['beta'].round(1)
+current_results['gamma'] = current_results['gamma'].round(1)
+current_results['delta'] = current_results['delta'].round(1)
+current_results['theta'] = current_results['theta'].round(1)
+current_results['partition'] = current_results['partition'].round(0)
+
 # adding current results flag
 ########################################################################
 current_results['done'] = 1
@@ -122,16 +141,6 @@ all_results = all_results[all_results.done.isnull()].copy()
 ########################################################################
 t_max = paras[paras.t_max.notnull()].t_max[0]
 all_results['z'] = range(0 + 1, len(all_results) + 1)
-
-# round the results
-all_results['investor'] = all_results['investor'].round(0)
-all_results['alpha'] = all_results['alpha'].round(1)
-all_results['beta'] = all_results['beta'].round(1)
-all_results['gamma'] = all_results['gamma'].round(1)
-all_results['delta'] = all_results['delta'].round(1)
-all_results['theta'] = all_results['theta'].round(1)
-all_results['partition'] = all_results['partition'].round(0)
-
 
 # wrapper function to allow
 def get_commands(row):
