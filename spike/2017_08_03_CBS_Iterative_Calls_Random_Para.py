@@ -1,4 +1,4 @@
-#!/apps/anaconda3/bin/python
+#!/apps/anaconda3-4.4.0/bin/python
 
 # Load packages
 ########################################################################
@@ -16,7 +16,7 @@ max_grid_jobs=int(str(sys.argv[4]))
 max_ppt_use=float(str(sys.argv[5]))
 name_main_program=str(sys.argv[6])
 
-base_prog_path='/user/user1/jc4144/Nachum/Ostrich/code/bin/'
+base_prog_path='/user/jc4144/Nachum/Ostrich/code/bin/'
 
 # Upload inputs
 ########################################################################
@@ -59,7 +59,12 @@ def get_main_program_path(base_prog_path,name_main_program,beta):
 
 # Define Function Calls
 ########################################################################
-def run_simulation(investor, alpha, beta, gamma, delta, theta, t_max, partition, para_path, z):
+def run_simulation(investor,alpha,beta,gamma,delta,theta,t_max,partition,para_path,z):
+    # Heplers
+    qs = '"'
+    sc = ';'
+    s = ' '
+
     # Defining the program path
     prog_path = get_main_program_path(base_prog_path, name_main_program, beta)
 
@@ -68,7 +73,7 @@ def run_simulation(investor, alpha, beta, gamma, delta, theta, t_max, partition,
     investor = str(int(investor))
     z = str(int(z))
 
-    inv_data_path = '/user/user1/jc4144/Nachum/Ostrich/cluster/cluster' + clu
+    inv_data_path = '/user/jc4144/Nachum/Ostrich/cluster/cluster' + clu
     inv_data_path = inv_data_path + '/88808sample' + investor + '.txt'
 
     # Defining the parameter path
@@ -76,39 +81,31 @@ def run_simulation(investor, alpha, beta, gamma, delta, theta, t_max, partition,
     para_file_name = para_file_name.split('.')[0]
 
     # Defining the full command
-    command = prog_path + ' ' + inv_data_path + ' 88808 504 ' + para_file_name + ' '
-    command = command + str(alpha) + ' ' + str(beta) + ' ' + str(gamma) + ' ' + str(delta) + ' '
-    command = command + str(theta) + ' ' + str(t_max) + ' ' + str(round(partition)) + ' '
-    command = command + z + ' RS 100 0.001 0.001 CBS F T'
+    command = prog_path + s + qs + inv_data_path + s + '88808 504' + s + para_file_name + s
+    command = command + str(alpha) + s + str(beta) + s + str(gamma) + s + str(delta) + s
+    command = command + str(theta) + s + str(t_max) + s + str(round(partition)) + s
+    command = command + z + s + 'RS 100 0.001 0.001 CBS F T' + qs
 
     # Defining prep command directory change
-    dir_cd = 'cd /NOBACKUP/scratch/jc4144/Nachum/Ostrich/cluster/cluster'
+    dir_cd = 'cd /work/jc4144/Nachum/Ostrich/cluster/cluster'
     dir_cd = dir_cd + clu + "/thread" + z
 
     # Defining the SGE command before command
-    sge = '/apps/wrappers/sge_run --grid_submit=batch --grid_mem=2G'
+    sge = 'sge_run --grid_submit=batch --grid_mem=2G'
 
-    # special
-    sp_com = 'ulimit -c 0'
-
-    # Other
-    qs = '"'
-    sc = ';'
-    s = ' '
-
-    command = dir_cd + sc + sge + s + qs + sp_com + sc + command + qs
+    command = dir_cd + sc + sge + s + command
 
     return command
 
 # Creating the set of all possible combinations
 ########################################################################
-all_results = inv_list[inv_list.investor.notnull()].copy()
-all_results['key'] = 1
-paras['key'] = 1
-all_results = pd.merge(all_results, paras, on='key')
+all_results=inv_list[inv_list.investor.notnull()].copy()
+all_results['key']=1
+paras['key']=1
+all_results=pd.merge(all_results,paras,on='key')
 del all_results['key']
 
-all_results_cols = all_results.columns
+all_results_cols=all_results.columns
 
 # Cleaning results b/f merging
 ########################################################################
@@ -131,55 +128,54 @@ current_results['partition'] = current_results['partition'].round(0)
 
 # adding current results flag
 ########################################################################
-current_results['done'] = 1
-merge_on = ['investor', 'alpha', 'beta', 'gamma', 'delta', 'theta', 'partition']
-all_results = pd.merge(all_results, current_results, how='left', on=merge_on)
+current_results['done']=1
+merge_on=['investor','alpha','beta','gamma','delta','theta','partition']
+all_results=pd.merge(all_results,current_results,how='left',on=merge_on)
 
-all_results = all_results[all_results.done.isnull()].copy()
+all_results=all_results[all_results.done.isnull()].copy()
 
 # Looping through the current results and running what is not there
 ########################################################################
-t_max = paras[paras.t_max.notnull()].t_max[0]
-all_results['z'] = range(0 + 1, len(all_results) + 1)
+t_max=paras[paras.t_max.notnull()].t_max[0]
+all_results['z']=range(0+1,len(all_results)+1)
 
 # wrapper function to allow
 def get_commands(row):
-    result = run_simulation(row['investor'],
-                            row['alpha'],
-                            row['beta'],
-                            row['gamma'],
-                            row['delta'],
-                            row['theta'],
-                            t_max,
-                            row['partition'],
-                            para_path,
-                            row['z'] % 500)
+    result=run_simulation(row['investor'],
+                          row['alpha'],
+                          row['beta'],
+                          row['gamma'],
+                          row['delta'],
+                              row['theta'],
+                              t_max,
+                              row['partition'],
+                              para_path,
+                              row['z']%500)
     return result
 
-
-all_results['commands'] = all_results.apply(get_commands, axis=1)
+all_results['commands']=all_results.apply(get_commands, axis=1)
 
 # Create command queue
 ########################################################################
-queue = deque()
+queue=deque()
 queue.extend(list(all_results.commands))
-while (len(queue) > 0):
-    # get # of jobs to schedule
-    num_jobs_to_schedule = get_num_to_schedule(get_job_nums(cmd_num_jimmy_jobs),
-                                               get_job_nums(cmd_num_all_jobs),
-                                               max_grid_jobs,
-                                               max_ppt_use)
-    # try scheduling them
+while(len(queue)>0):
+    #get # of jobs to schedule
+    num_jobs_to_schedule=get_num_to_schedule(get_job_nums(cmd_num_jimmy_jobs),
+                                             get_job_nums(cmd_num_all_jobs),
+                                             max_grid_jobs,
+                                             max_ppt_use)
+    #try scheduling them
     for i in range(num_jobs_to_schedule):
         try:
-            str_command = queue.pop()
-            com_result = os.system(str_command)
-            all_results.ix[all_results.commands == str_command,
-                           'command_results'] = com_result
+            str_command=queue.pop()
+            com_result=os.system(str_command)
+            all_results.loc[all_results.commands==str_command,
+                           'command_results']=com_result
         except IndexError:
             pass
 
-        # save the results file
-temp = current_results_path.split('.')
-all_results_path = temp[0] + "_iter_results." + temp[1]
+#save the results file
+temp=current_results_path.split('.')
+all_results_path=temp[0]+"_iter_results."+temp[1]
 all_results.to_csv(all_results_path, index=False)
